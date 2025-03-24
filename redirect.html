@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader"></div>
+    <h2>Redirecting you...</h2>
+    <p id="destination"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+
+            if (!code) {
+                document.body.innerHTML = '<h2>Error: Invalid link</h2>';
+                return;
+            }
+            const savedLinks = JSON.parse(localStorage.getItem('shortenedLinks')) || [];
+            const link = savedLinks.find(l => l.shortCode === code);
+
+            if (!link) {
+                document.body.innerHTML = '<h2>Error: Link not found</h2>';
+                return;
+            }
+            link.clicks++;
+            link.lastClicked = new Date().toISOString();
+            const referrer = document.referrer || 'direct';
+            link.sources[referrer] = (link.sources[referrer] || 0) + 1;
+            localStorage.setItem('shortenedLinks', JSON.stringify(savedLinks));
+            document.getElementById('destination').textContent = link.originalUrl;
+            setTimeout(() => {
+                window.location.href = link.originalUrl.startsWith('http') ?
+                    link.originalUrl : 'https://' + link.originalUrl;
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

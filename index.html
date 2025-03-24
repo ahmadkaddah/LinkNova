@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkNova | Shrink Big Links, Unleash Big Ideas</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&family=Caveat:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="theme-default">
+    <div class="particle-container" id="particles"></div>
+
+    <header>
+        <div class="logo">
+            <span class="logo-text">Link<span class="accent">Nova</span></span>
+            <div class="logo-orbit">
+                <div class="orbit-dot"></div>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active" data-section="home">Home</a></li>
+                <li><a href="#" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" data-section="about">About</a></li>
+            </ul>
+        </nav>
+        <div class="user-controls">
+            <button id="theme-toggle" class="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <span class="tooltip">Switch Theme</span>
+            </button>
+            <button id="sound-toggle" class="sound-toggle">
+                <i class="fas fa-volume-mute"></i>
+                <span class="tooltip">Toggle Sound</span>
+            </button>
+            <button id="login-btn" class="login-btn">Login</button>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="section active">
+            <div class="hero">
+                <h1 class="hero-title">Shrink Big Links, <span class="accent">Unleash Big Ideas</span></h1>
+                <p class="hero-subtitle">Transform lengthy URLs into powerful, trackable short links with style</p>
+
+                <div class="url-shortener">
+                    <div class="input-container">
+                        <input type="url" id="long-url" placeholder="Paste your long URL here..." required>
+                        <div class="validation-indicator"></div>
+                    </div>
+                    <div class="options-container">
+                        <div class="custom-alias">
+                            <input type="text" id="custom-alias" placeholder="Custom alias (optional)">
+                        </div>
+                        <div class="link-personality">
+                            <select id="link-personality">
+                                <option value="default">Link Personality</option>
+                                <option value="bold">Bold</option>
+                                <option value="mysterious">Mysterious</option>
+                                <option value="playful">Playful</option>
+                                <option value="cosmic">Cosmic</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="shorten-btn" class="shorten-btn">
+                        <span class="btn-text">Shorten</span>
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </button>
+                </div>
+
+                <div id="result-container" class="result-container hidden">
+                    <div class="short-url-display">
+                        <span id="short-url-text"></span>
+                        <button id="copy-btn" class="copy-btn">
+                            <i class="fas fa-copy"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <div class="qr-code">
+                        <div id="qr-code-container"></div>
+                        <button id="download-qr" class="download-qr">
+                            <i class="fas fa-download"></i>
+                            <span>Download QR</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-links">
+                <h2>Recent Links <span class="accent-dot"></span></h2>
+                <div id="recent-links-container" class="links-container">
+                    <div class="empty-state">
+                        <i class="fas fa-link-slash"></i>
+                        <p>Your shortened links will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section">
+            <div class="dashboard-header">
+                <h2>Your Link <span class="accent">Dashboard</span></h2>
+                <div class="dashboard-controls">
+                    <div class="filter-container">
+                        <select id="link-filter">
+                            <option value="all">All Links</option>
+                            <option value="work">Work</option>
+                            <option value="personal">Personal</option>
+                            <option value="campaigns">Campaigns</option>
+                        </select>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="cards">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-content">
+                <div class="stats-overview">
+                    <div class="stat-card total-links">
+                        <div class="stat-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Links</h3>
+                            <p id="total-links-count">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card total-clicks">
+                        <div class="stat-icon">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Clicks</h3>
+                            <p id="total-clicks-count">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card top-performer">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Top Performer</h3>
+                            <p id="top-performer-link">-</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Click Activity</h3>
+                        <div class="chart-container">
+                            <canvas id="clicks-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Traffic Sources</h3>
+                        <div class="chart-container">
+                            <canvas id="sources-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="geo-map">
+                    <h3>Geographic Distribution</h3>
+                    <div id="map-container" class="map-container">
+                    </div>
+                </div>
+
+                <div class="links-timeline">
+                    <h3>Your Links</h3>
+                    <div id="links-container" class="links-container">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Create links to see your statistics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="about-content">
+                <h2>About <span class="accent">LinkNova</span></h2>
+                <p>LinkNova is not just another URL shortener. It's a powerful tool designed to transform your lengthy
+                    URLs into concise, trackable links with style and personality.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Lightning Fast</h3>
+                        <p>Generate short links instantly with our optimized algorithm</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3>Detailed Analytics</h3>
+                        <p>Track clicks, sources, and geographic data in real-time</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <h3>Link Personality</h3>
+                        <p>Give your links a unique style that matches their purpose</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Mobile Optimized</h3>
+                        <p>Perfect experience across all your devices</p>
+                    </div>
+                </div>
+
+                <div class="how-it-works">
+                    <h3>How It Works</h3>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <p>Paste your long URL in the input field</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <p>Customize your link with an alias or personality</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <p>Click "Shorten" and watch the magic happen</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <p>Share your link and track its performance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="signup">Sign Up</button>
+            </div>
+
+            <div id="login-tab" class="tab-content active">
+                <h2>Welcome Back!</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Login</button>
+                </form>
+                <div class="recovery">
+                    <p>Forgot your account? <a href="#" id="recovery-link">Recover with Profile Code</a></p>
+                </div>
+            </div>
+
+            <div id="signup-tab" class="tab-content">
+                <h2>Create Account</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" required>
+                        <div class="password-strength"></div>
+                    </div>
+                    <div class="avatar-selection">
+                        <label>Choose Avatar</label>
+                        <div class="avatar-options">
+                            <div class="avatar-option" data-avatar="1"></div>
+                            <div class="avatar-option" data-avatar="2"></div>
+                            <div class="avatar-option" data-avatar="3"></div>
+                            <div class="avatar-option" data-avatar="4"></div>
+                            <div class="avatar-option custom">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                        </div>
+                        <input type="file" id="custom-avatar" accept="image/*" hidden>
+                    </div>
+                    <button type="submit" class="submit-btn">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="recovery-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <h2>Account Recovery</h2>
+            <p>Enter your profile code to recover your account</p>
+            <form id="recovery-form">
+                <div class="form-group">
+                    <label for="profile-code">Profile Code</label>
+                    <input type="text" id="profile-code" required>
+                </div>
+                <button type="submit" class="submit-btn">Recover Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="link-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <div class="link-details-header">
+                <h2>Link Details</h2>
+                <div class="link-actions">
+                    <button id="edit-link-btn" class="action-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button id="delete-link-btn" class="action-btn">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="link-details-content">
+            </div>
+        </div>
+    </div>
+
+    <div id="confetti-container" class="confetti-container"></div>
+    <div id="notification" class="notification"></div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span class="logo-text">Link<span class="accent">Nova</span></span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2023 LinkNova. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/particles.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="assets/js/url-shortener.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/auth.js"></script>
+</body>
+
+</html>
